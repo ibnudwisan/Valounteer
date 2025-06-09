@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>My Product Store - E-commerce Profesional</title>
+  <style>
+    /* Reset & dasar */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f7fa;
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    header {
+      width: 100%;
+      max-width: 1200px;
+      padding: 20px 0;
+      border-bottom: 2px solid #ddd;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 2.8rem;
+      color: #0077cc;
+      letter-spacing: 2px;
+    }
+
+    nav {
+      margin-top: 10px;
+    }
+
+    nav a {
+      margin: 0 15px;
+      text-decoration: none;
+      font-weight: 600;
+      color: #0077cc;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover {
+      color: #004a80;
+    }
+
+    main {
+      width: 100%;
+      max-width: 1200px;
+      margin-top: 40px;
+    }
+
+    /* Grid produk */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+    }
+
+    .product-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: default;
+    }
+
+    .product-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .product-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .product-card:hover .product-image {
+      transform: scale(1.05);
+    }
+
+    .product-details {
+      padding: 15px 20px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      text-align: center;
+    }
+
+    .product-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #222;
+    }
+
+    .product-price {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #0077cc;
+      margin-bottom: 15px;
+    }
+
+    /* Tombol detail produk */
+    .btn-detail {
+      background-color: #555;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+
+    .btn-detail:hover,
+    .btn-detail:focus {
+      background-color: #333;
+      outline: none;
+    }
+
+    /* Modal Detail Produk */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1200;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(3px);
+      justify-content: center;
+      align-items: center;
+      animation: fadeInModal 0.3s ease forwards;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 15px;
+      padding: 25px;
+      max-width: 500px;
+      width: 90%;
+      text-align: center;
+      position: relative;
+      animation: slideUp 0.3s ease forwards;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #333;
+      user-select: none;
+      transition: color 0.3s ease;
+      background: none;
+      border: none;
+    }
+
+    .close-modal:hover,
+    .close-modal:focus {
+      color: #0077cc;
+      outline: none;
+    }
+
+    .modal-content img {
+      max-width: 100%;
+      border-radius: 12px;
+      margin-bottom: 15px;
+    }
+
+    .modal-content h2 {
+      margin-bottom: 10px;
+      color: #222;
+    }
+
+    .modal-content p {
+      margin-bottom: 15px;
+      color: #555;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    .modal-content .price {
+      font-weight: 700;
+      color: #0077cc;
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+    }
+
+    .btn-buy {
+      background-color: #25d366;
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      font-size: 1.1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+
+    .btn-buy:hover,
+    .btn-buy:focus {
+      background-color: #128c4a;
+      outline: none;
+    }
+
+    @keyframes fadeInModal {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(50px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 60px;
+      font-size: 1rem;
+      color: #777;
+      user-select: none;
+      text-align: center;
+      width: 100%;
+      max-width: 1200px;
+      padding: 20px 0;
+      border-top: 1px solid #ddd;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 2rem;
+      }
+
+      .product-image {
+        height: 150px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>Collection Image</h1>
+    <nav>
+      <a href="#products">Produk</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="products" class="product-grid" aria-label="Daftar produk">
+      <!-- Produk akan dimuat di sini oleh JavaScript -->
+    </section>
+  </main>
+
+  <!-- Modal Detail Produk -->
+  <div id="productModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-content">
+      <button class="close-modal" aria-label="Tutup modal">&times;</button>
+      <img id="modalImage" src="" alt="Gambar Produk" />
+      <h2 id="modalTitle"></h2>
+      <p id="modalDescription"></p>
+      <p id="modalPrice" class="price"></p>
+      <button id="buyBtn" class="btn-buy">Blank</button>
+    </div>
+  </div>
+
+  <footer id="contact">
+    <p>© 2025 Image. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Data produk contoh (ganti dengan produkmu sendiri)
+    const products = [
+      {
+        id: 1,
+        name: "Image 1",
+        description: "Boneka imut :v.",
+        price: 0,
+        image: "rxi.jpg"
+      },
+      {
+        id: 2,
+        name: "Image 2",
+        description: "Tidur dilahan bunga yang indah...",
+        price: 0,
+        image: "rxi1.jpg"
+      },
+      {
+        id: 3,
+        name: "Image 3",
+        description: ":v",
+        price: 0,
+        image: "rxi2.jpg"
+      },
+      {
+        id: 4,
+        name: "Image 3",
+        description: "RPL adalah jurusan favourite ku ",
+        price: 0,
+        image: "rxi3.jpg"
+      }
+    ];
+
+    const productGrid = document.querySelector('.product-grid');
+    const productModal = document.getElementById('productModal');
+    const modalImage = document.getElementById('modalImage');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDescription = document.getElementById('modalDescription');
+    const modalPrice = document.getElementById('modalPrice');
+    const buyBtn = document.getElementById('buyBtn');
+    const closeModalBtn = productModal.querySelector('.close-modal');
+
+    // Format harga ke Rupiah
+    function formatRupiah(number) {
+      return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(number);
+    }
+
+    // Render produk ke halaman
+    function renderProducts() {
+      products.forEach(product => {
+        const card = document.createElement('article');
+        card.className = 'product-card';
+        card.innerHTML = `
+        <img src="${product.image}" alt="${product.name}" class="product-image" loading="lazy" />
+        <div class="product-details">
+          <h2 class="product-title">${product.name}</h2>
+          <div class="product-price">${formatRupiah(product.price)}</div>
+          <button class="btn-detail" aria-label="Lihat detail ${product.name}" data-id="${product.id}">Detail Foto</button>
+        </div>
+      `;
+        productGrid.appendChild(card);
+      });
+    }
+
+    // Buka modal detail produk
+    function openProductModal(product) {
+      modalImage.src = product.image;
+      modalImage.alt = product.name;
+      modalTitle.textContent = product.name;
+      modalDescription.textContent = product.description;
+      modalPrice.textContent = formatRupiah(product.price);
+      buyBtn.onclick = () => {
+        const phoneNumber = '03490933'; // Ganti dengan nomor WhatsApp kamu
+        const message = encodeURIComponent(`Tidak Dijual!!! *${product.name}* dengan harga ${formatRupiah(product.price)}.`);
+        window.open(`https:${phoneNumber}?text=${message}`, '_blank');
+      };
+      productModal.classList.add('active');
+      // Fokus ke tombol beli untuk aksesibilitas
+      buyBtn.focus();
+    }
+
+    // Tutup modal
+    closeModalBtn.onclick = () => {
+      productModal.classList.remove('active');
+    };
+    window.onclick = (e) => {
+      if (e.target === productModal) {
+        productModal.classList.remove('active');
+      }
+    };
+    window.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && productModal.classList.contains('active')) {
+        productModal.classList.remove('active');
+      }
+    });
+
+    // Event listener tombol detail produk
+    productGrid.addEventListener('click', e => {
+      if (e.target.classList.contains('btn-detail')) {
+        const id = parseInt(e.target.dataset.id);
+        const product = products.find(p => p.id === id);
+        openProductModal(product);
+      }
+    });
+
+    // Inisialisasi
+    renderProducts();
+  </script>
+
+</body>
+
+</html>
