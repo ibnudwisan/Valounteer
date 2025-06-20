@@ -282,10 +282,7 @@
 <body>
 
   <header>
-    <h1>Collection Image</h1>
-    <nav>
-      <a href="#products">Produk</a>
-    </nav>
+    <h1>Image Collection</h1>
   </header>
 
   <main>
@@ -302,13 +299,8 @@
       <h2 id="modalTitle"></h2>
       <p id="modalDescription"></p>
       <p id="modalPrice" class="price"></p>
-      <button id="buyBtn" class="btn-buy">.....</button>
     </div>
   </div>
-
-  <footer id="contact">
-    <p>© 2025 Image. All rights reserved.</p>
-  </footer>
 
   <script>
     // Data produk contoh (ganti dengan produkmu sendiri)
@@ -318,28 +310,56 @@
         name: "Image 1",
         description: "Boneka imut :v",
         price: 0,
-        image: "rxi.jpg"
+        image: "assets/rxi.jpg"
       },
       {
         id: 2,
         name: "Image 2",
         description: "Tidur dilahan bunga yang indah...",
         price: 0,
-        image: "rxi1.jpg"
+        image: "assets/rxi1.jpg"
       },
       {
         id: 3,
         name: "Image 3",
         description: ":v",
         price: 0,
-        image: "rxi2.jpg"
+        image: "assets/rxi2.jpg"
       },
       {
         id: 4,
         name: "Image 4",
         description: "... ",
         price: 0,
-        image: "rxi4.jpg"
+        image: "assets/rxi4.jpg"
+      },
+      {
+        id: 5,
+        name: "Image 5",
+        description: "",
+        price: 0,
+        image: "assets/i2p.jpg"
+      },
+      {
+        id: 6,
+        name: "Image 6",
+        description: "Black Cat... ",
+        price: 0,
+        image: "assets/GitCat.jpg"
+      },
+      {
+        id: 7,
+        name: "Image 7",
+        description: "Knight Armor ",
+        price: 0,
+        image: "assets/Knight1.jpg"
+      },
+      {
+        id: 8,
+        name: "Image 8",
+        description: "Lelah... ",
+        price: 0,
+        image: "assets/Knight2.jpg"
       }
     ];
 
@@ -349,13 +369,7 @@
     const modalTitle = document.getElementById('modalTitle');
     const modalDescription = document.getElementById('modalDescription');
     const modalPrice = document.getElementById('modalPrice');
-    const buyBtn = document.getElementById('buyBtn');
     const closeModalBtn = productModal.querySelector('.close-modal');
-
-    // Format harga ke Rupiah
-    function formatRupiah(number) {
-      return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(number);
-    }
 
     // Render produk ke halaman
     function renderProducts() {
@@ -366,7 +380,6 @@
         <img src="${product.image}" alt="${product.name}" class="product-image" loading="lazy" />
         <div class="product-details">
           <h2 class="product-title">${product.name}</h2>
-          <div class="product-price">${formatRupiah(product.price)}</div>
           <button class="btn-detail" aria-label="Lihat detail ${product.name}" data-id="${product.id}">Detail Foto</button>
         </div>
       `;
@@ -380,15 +393,8 @@
       modalImage.alt = product.name;
       modalTitle.textContent = product.name;
       modalDescription.textContent = product.description;
-      modalPrice.textContent = formatRupiah(product.price);
-      buyBtn.onclick = () => {
-        const phoneNumber = '03490933'; // Ganti dengan nomor WhatsApp kamu
-        const message = encodeURIComponent(`Tidak Dijual!!! *${product.name}* dengan harga ${formatRupiah(product.price)}.`);
-        window.open(`https:${phoneNumber}?text=${message}`, '_blank');
-      };
+      modalPrice.textContent = '';
       productModal.classList.add('active');
-      // Fokus ke tombol beli untuk aksesibilitas
-      buyBtn.focus();
     }
 
     // Tutup modal
